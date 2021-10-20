@@ -1,0 +1,13 @@
+version: "3"
+
+# Define services
+services:
+  # App Service
+  api:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./:/stripe-eboekhouden-go
+    command: dlv exec --listen=:2345 --headless --api-version=2 --log ./cmd/api
