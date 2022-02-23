@@ -9,5 +9,10 @@ import (
 )
 
 func New(s *service.Service, db *storage.Storage, p *push.Push, c *fasthttp.Client, config *config.Config) error {
+	var err error
+	if s.Customer, err = NewCustomer(db.Customer, p.Soap.Customer); err != nil {
+		return err
+	}
+
 	return nil
 }

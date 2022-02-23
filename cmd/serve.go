@@ -77,7 +77,7 @@ var serveCommand = &cobra.Command{
 
 		server.NewRouter(serve, hand, c.Router)
 
-		if err := p.Soap.Customer.Create(context.TODO(), &customer.Service{
+		if err := serv.Customer.Create(context.TODO(), &customer.Service{
 			Company: "Test 1234",
 		}); err != nil {
 			log.Fatal(err)
