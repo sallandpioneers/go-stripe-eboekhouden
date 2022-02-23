@@ -1,0 +1,8 @@
+[eboekhouden]
+username = "admin@qrlink.nl"
+securityCode1 = "abcd"
+securityCode2 = "efgh"
+
+[stripe]
+key=""
+secret=""

@@ -12,13 +12,14 @@ const Business Type = "b"
 const Private Type = "p"
 
 type Service struct {
-	ID        ulid.ULID
-	BP        bool
-	Code      string
-	Company   string
-	Contact   string
-	Gender    Gender
-	Addresses struct {
+	ID         ulid.ULID
+	RelationID int64
+	BP         bool
+	Code       string
+	Company    string
+	Contact    string
+	Gender     Gender
+	Addresses  struct {
 		Business struct {
 			Address string
 			ZipCode string
