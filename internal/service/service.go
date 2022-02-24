@@ -13,6 +13,11 @@ func New(s *service.Service, db *storage.Storage, p *push.Push, c *fasthttp.Clie
 	if s.Customer, err = NewCustomer(db.Customer, p.Soap.Customer); err != nil {
 		return err
 	}
+	if s.Hooks, err = NewHooks(); err != nil {
+		return err
+	}
+
+	s.Hooks.AddCustomer(s.Customer)
 
 	return nil
 }

@@ -7,5 +7,8 @@ import (
 )
 
 type Servicer interface {
+	AddCustomer(service customer.Servicer)
+
 	CustomerCreate(context.Context, *customer.Service) error
+	CustomerUpdate(context.Context, *customer.Service) error
 }

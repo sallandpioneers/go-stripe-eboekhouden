@@ -30,4 +30,5 @@ func NewRouter(s *fasthttp.Server, h *handler.Handler, config *config.Router) *r
 
 //nolint function to long
 func initRoutes(r *router.Router, h *handler.Handler) {
+	r.POST("/hooks", h.Hooks.AllHooks)
 }

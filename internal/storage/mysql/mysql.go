@@ -18,6 +18,7 @@ import (
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/storage"
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/storage/mysql/migrations"
+	queries "github.com/aceworksdev/go-stripe-eboekhouden/internal/storage/mysql/queries/generated"
 )
 
 var registerDriverOnce sync.Once
@@ -29,7 +30,16 @@ const (
 func New(c *config.StorageMySQL, s *storage.Storage, sa *internal.ServicesAvailable) (err error) {
 	dbs := &DBs{}
 	errs := make(chan error, 10)
-	go NewConnection(c, dbs, sa, errs)
+	NewConnection(c, dbs, sa, errs)
+	querier, err := queries.Prepare(context.TODO(), dbs.Master)
+	if err != nil {
+		return err
+	}
+
+	if s.Customer, err = NewCustomer(dbs, querier); err != nil {
+		return err
+	}
+
 	return err
 }
 

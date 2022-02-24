@@ -5,9 +5,8 @@ package generated
 import (
 	"context"
 	"encoding/xml"
-	"time"
-
 	"github.com/hooklift/gowsdl/soap"
+	"time"
 )
 
 // against "unused imports"
@@ -237,7 +236,7 @@ type UpdateRelatie struct {
 type UpdateRelatieResponse struct {
 	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap UpdateRelatieResponse"`
 
-	UpdateRelatieResult *CError `xml:"UpdateRelatieResult,omitempty" json:"UpdateRelatieResult,omitempty"`
+	UpdateRelatieResult *CError `xml:"ErrorMsg,omitempty" json:"ErrorMsg,omitempty"`
 }
 
 type GetRelaties struct {
@@ -377,10 +376,10 @@ type CResultGetAdministraties struct {
 }
 
 type CError struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap ErrorMsg"`
+	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cError"`
 
 	LastErrorCode string `xml:"LastErrorCode,omitempty" json:"LastErrorCode,omitempty"`
- 
+
 	LastErrorDescription string `xml:"LastErrorDescription,omitempty" json:"LastErrorDescription,omitempty"`
 }
 
@@ -776,7 +775,7 @@ type ArrayOfCGrootboekrekening struct {
 }
 
 type CRelatie struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap oRel"`
+	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cRelatie"`
 
 	ID int64 `xml:"ID,omitempty" json:"ID,omitempty"`
 
@@ -864,7 +863,7 @@ type CRelatie struct {
 }
 
 type CResultAddRelatie struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap AddRelatieResult"`
+	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cResultAddRelatie"`
 
 	ErrorMsg *CError `xml:"ErrorMsg,omitempty" json:"ErrorMsg,omitempty"`
 
@@ -924,7 +923,7 @@ type COpenPost struct {
 }
 
 type CResultOpenSession struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap OpenSessionResult"`
+	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cResultOpenSession"`
 
 	ErrorMsg *CError `xml:"ErrorMsg,omitempty" json:"ErrorMsg,omitempty"`
 

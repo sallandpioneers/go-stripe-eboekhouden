@@ -89,7 +89,7 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 	case "customer.created":
 		err = h.customerCreate(ev.Data.Raw)
 	case "customer.updated":
-		err = nil
+		err = h.customerUpdate(ev.Data.Raw)
 	case "customer.tax_id.updated":
 		err = nil
 	case "payment_intent.succeeded":
@@ -127,6 +127,39 @@ func (h *hooksHandler) customerCreate(data []byte) error {
 	}
 
 	if err := h.service.CustomerCreate(context.Background(), item); err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+func (h *hooksHandler) customerUpdate(data []byte) error {
+	var c stripe.Customer
+	jsonIterator := h.jsonIteratorPool.BorrowIterator(data)
+	defer h.jsonIteratorPool.ReturnIterator(jsonIterator)
+	jsonIterator.ReadVal(&c)
+	if jsonIterator.Error != nil {
+		return jsonIterator.Error
+	}
+	item := &customer.Service{
+		StripeID: c.ID,
+		Name:     c.Name,
+		Email:    c.Email,
+	}
+
+	item.Addresses.Business.Address = c.Address.Line1
+	item.Addresses.Business.ZipCode = c.Address.PostalCode
+	item.Addresses.Business.City = c.Address.City
+	item.Addresses.Business.Country = c.Address.Country
+
+	if c.Shipping != nil {
+		item.Addresses.Mailing.Address = c.Shipping.Address.Line1
+		item.Addresses.Mailing.ZipCode = c.Shipping.Address.PostalCode
+		item.Addresses.Mailing.City = c.Shipping.Address.City
+		item.Addresses.Mailing.Country = c.Shipping.Address.Country
+	}
+
+	if err := h.service.CustomerUpdate(context.Background(), item); err != nil {
 		return err
 	}
 	return nil

@@ -1,13 +1,11 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 	"log"
 
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal"
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/handler"
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/push"
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server"
@@ -17,6 +15,7 @@ import (
 	storageStruct "github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/storage"
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/service"
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/storage"
+	"github.com/aceworksdev/go-stripe-eboekhouden/internal/utils/id"
 
 	"github.com/spf13/cobra"
 	"github.com/stripe/stripe-go/v72"
@@ -77,11 +76,7 @@ var serveCommand = &cobra.Command{
 
 		server.NewRouter(serve, hand, c.Router)
 
-		if err := serv.Customer.Create(context.TODO(), &customer.Service{
-			Company: "Test 1234",
-		}); err != nil {
-			log.Fatal(err)
-		}
+		id.NewULID()
 
 		log.Printf("Starting up go-stripe-eboekhouden back-end, listening on port: %d\n", c.Server.Port)
 		log.Fatal(serve.ListenAndServe(fmt.Sprintf(":%d", c.Server.Port)))

@@ -2,7 +2,7 @@ dir = $(shell pwd)
 
 include .env.makefile
 
-stripeContainer = docker run --rm -it --network=go-stripe-eboekhouden-net -e STRIPE_API_KEY=$$STRIPE_API_KEY stripe/stripe-cli:v1.7.9
+stripeContainer = docker run --rm -it --network=go-stripe-eboekhouden-net -e STRIPE_API_KEY=$$STRIPE_API_KEY stripe/stripe-cli:v1.7.13
 
 .PHONY: default
 default:
@@ -34,16 +34,21 @@ bench:
 
 .PHONY: migrate
 migrate:
-	docker-compose exec api /go-stripe-eboekhouden/go-stripe-eboekhouden migrate up --mysql-conn "mysql://user:password@tcp(db:3306)/db"
+	docker-compose exec go_stripe_boekhouden_api /go-stripe-eboekhouden/go-stripe-eboekhouden migrate up --mysql-conn "mysql://user:password@tcp(db:3306)/db"
 
 .PHONY: status
 status:
-	docker-compose exec api /go-stripe-eboekhouden/go-stripe-eboekhouden migrate status --mysql-conn "mysql://user:password@tcp(db:3306)/db"
+	docker-compose exec go_stripe_boekhouden_api /go-stripe-eboekhouden/go-stripe-eboekhouden migrate status --mysql-conn "mysql://user:password@tcp(go_stripe_boekhouden_db:3306)/db"
 
 .PHONY: mysql
 mysql: 
-	docker-compose exec db mysql -u root --password=password --database=db
+	docker-compose exec go_stripe_boekhouden_db mysql -u root --password=password --database=db
+
+.PHONY: sqlc
+sqlc:
+	rm -f internal/storage/mysql/queries/generated/*.sql.go
+	docker run --rm -v $(dir)/internal/storage/mysql:/src -w /src/queries kjconroy/sqlc generate
 
 .PHONY: listen
 listen:
-	$(stripeContainer) listen -f api:8080/hooks
+	$(stripeContainer) listen -f go_stripe_boekhouden_api:8080/hooks

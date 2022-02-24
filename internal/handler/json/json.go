@@ -12,7 +12,7 @@ import (
 func New(h *handler.Handler, s *service.Service, c *config.Config, sa *internal.ServicesAvailable) error {
 	jip, jsp := NewPool()
 	var err error
-	if h.Hooks, err = NewHooks(s, c.Stripe.Secret, jip, jsp); err != nil {
+	if h.Hooks, err = NewHooks(s.Hooks, c.Stripe.Secret, jip, jsp); err != nil {
 		return err
 	}
 	return nil

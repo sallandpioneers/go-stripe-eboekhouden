@@ -25,3 +25,9 @@ func (service *hooksService) CustomerCreate(ctx context.Context, item *customer.
 	}
 	return nil
 }
+func (service *hooksService) CustomerUpdate(ctx context.Context, item *customer.Service) error {
+	if err := service.customer.Update(ctx, item); err != nil {
+		return err
+	}
+	return nil
+}
