@@ -69,9 +69,15 @@ type StorageMySQL struct {
 }
 
 type EBoekHouden struct {
-	Username      string
-	SecurityCode1 string
-	SecurityCode2 string
+	Username                       string
+	SecurityCode1                  string
+	SecurityCode2                  string
+	UseLedgerAccountCodeForAll     bool
+	UseLedgerAccountCodePerProduct bool
+	UseLedgerAccountCodePerPlan    bool
+	LedgerAccountCodeDefault       string
+	LedgerAccountCodeProducts      map[string]string
+	LedgerAccountCodePlans         map[string]string
 }
 
 type Stripe struct {

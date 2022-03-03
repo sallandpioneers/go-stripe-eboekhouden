@@ -10,13 +10,13 @@ type Type string
 type TaxType string
 
 const (
-	InvoiceReceived        Type = "FactuurOntvangen"
-	InvoiceSend            Type = "FactuurVerstuurd"
-	InvoicePaymentReceived Type = "FactuurbetalingOntvangen"
-	InvoicePaymentSend     Type = "FactuurbetalingVerstuurd"
-	MoneyReceived          Type = "GeldOntvangen"
-	MoneySpend             Type = "GeldUitgegeven"
-	Memorial               Type = "Memoriaal"
+	InvoiceReceived        Type = "InvoiceReceived"
+	InvoiceSend            Type = "InvoiceSend"
+	InvoicePaymentReceived Type = "InvoicePaidReceived"
+	InvoicePaymentSend     Type = "InvoicePaidSend"
+	MoneyReceived          Type = "MoneyReceived"
+	MoneySpend             Type = "MoneySpend"
+	Memorial               Type = "Memorial"
 
 	Inclusive TaxType = "IN"
 	Exclusice TaxType = "EX"
@@ -24,13 +24,13 @@ const (
 
 type Service struct {
 	ID                ulid.ULID
-	MutationNR        int
+	Number            int
 	Type              Type
 	Date              time.Time
 	LedgerAccountCode string
 	CustomerCode      string
 	InvoiceNumber     string
-	InvoiceURL        string // Boekstuk, will be url to pdf hosted by stripe
+	InvoiceURL        string
 	Description       string
 	PaymentTerm       string
 	PaymentFeature    string
@@ -38,10 +38,10 @@ type Service struct {
 }
 
 type ServiceItem struct {
-	VAT               int
-	Amount            int
+	VAT               float64
+	Amount            float64
 	VATCode           string
 	VATAmount         int
 	LedgerAccountCode string
-	KostenplaatsID    int
+	KostenplaatsID    int64
 }

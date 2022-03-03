@@ -14,42 +14,33 @@ const (
 )
 
 type Service struct {
-	ID              ulid.ULID
-	Number          string
-	CustomerCode    string
-	Date            time.Time
-	DaysUntilDue    int
-	InvoiceTemplate string
-	Email           struct {
-		Send    bool
-		Subject string
-		Message string
-		Address string
-		Name    string
-	}
-	AutomaticDebtCollection bool
-	DirectDebit             struct {
-		IBAN                string
-		Type                DirectDebitType
-		ID                  string
-		Date                time.Time
-		First               bool
-		InNameOf            string
-		Location            string
-		Description         string
-		Add                 bool
-		MutationDescription string
-	}
-	Items []ItemService
+	ID               ulid.ULID
+	StripeID         string
+	CustomerID       ulid.ULID
+	StripeCustomerID string
+	MutationID       int64
+	Number           string
+	DueDate          time.Time
+	CollectionMethod string
+	Items            []ItemService
+	Subtotal         int64
+	Tax              int64
+	Total            int64
+	AmountDue        int64
+	AmountPaid       int64
+	AmountRemaining  int64
+	CreatedAt        time.Time
 }
 
 type ItemService struct {
-	Amount            int
-	Unit              string
-	Code              string
-	Description       string
-	PricePerUnit      string
-	BTWCode           string
-	ContraAccountCode string // !?
-	KostenplaatsID    int    // !?
+	ID              ulid.ULID
+	StripeID        string
+	StripePlanID    string
+	StripeProductID string
+	Quantity        int64
+	Description     string
+	Amount          int64 // In Cents
+	BTWCode         string
+	// Unit              string
+	// Code              string
 }

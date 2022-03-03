@@ -2,6 +2,7 @@ package soap
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
@@ -32,7 +33,7 @@ func (service *customerPush) Create(ctx context.Context, item *customer.Service)
 		ORel: &eboekhouden.CRelatie{
 			AddDatum:  soap.CreateXsdDateTime(time.Now(), true),
 			Code:      item.Code,
-			Bedrijf:   item.Company,
+			Bedrijf:   item.Name,
 			BP:        string(item.Type),
 			Adres:     item.Addresses.Business.Address,
 			Postcode:  item.Addresses.Business.ZipCode,
@@ -65,13 +66,14 @@ func (service *customerPush) Update(ctx context.Context, item *customer.Service)
 		return err
 	}
 
+	log.Println(item)
 	resp, err := service.client.UpdateRelatieContext(ctx, &eboekhouden.UpdateRelatie{
 		SessionID:     session.SessionID,
 		SecurityCode2: session.SecurityCode2,
 		ORel: &eboekhouden.CRelatie{
 			AddDatum:  soap.CreateXsdDateTime(time.Now(), true),
 			Code:      item.Code,
-			Bedrijf:   item.Company,
+			Bedrijf:   item.Name,
 			BP:        string(item.Type),
 			Adres:     item.Addresses.Business.Address,
 			Postcode:  item.Addresses.Business.ZipCode,
@@ -89,7 +91,8 @@ func (service *customerPush) Update(ctx context.Context, item *customer.Service)
 		return err
 	}
 	if resp.UpdateRelatieResult != nil {
-		if err := handleError(resp.UpdateRelatieResult); err != nil {
+		b := eboekhouden.CError(*resp.UpdateRelatieResult)
+		if err := handleError(&b); err != nil {
 			return err
 		}
 	}

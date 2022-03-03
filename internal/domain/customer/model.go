@@ -17,9 +17,7 @@ type Service struct {
 	Name     string
 
 	RelationID int64
-	BP         bool
 	Code       string
-	Company    string
 	Contact    string
 	Addresses  struct {
 		Business struct {

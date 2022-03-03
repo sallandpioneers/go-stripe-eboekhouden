@@ -14,7 +14,10 @@ type customerStorage struct {
 }
 
 func NewCustomer(dbs *DBs, querier *queries.Queries) (customer.Storager, error) {
-	return &customerStorage{dbs: dbs, queries: querier}, nil
+	return &customerStorage{
+		dbs:     dbs,
+		queries: querier,
+	}, nil
 }
 
 func (storage *customerStorage) Create(ctx context.Context, item *customer.Service) error {

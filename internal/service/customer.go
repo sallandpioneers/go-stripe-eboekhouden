@@ -6,6 +6,7 @@ import (
 
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/utils/id"
+	"github.com/oklog/ulid"
 )
 
 type customerService struct {
@@ -20,6 +21,18 @@ func NewCustomer(s customer.Storager, p customer.Pusher) (customer.Servicer, err
 	}, nil
 }
 
+func (service *customerService) Get(ctx context.Context, id ulid.ULID) (*customer.Service, error) {
+	return service.storage.Get(ctx, id)
+}
+
+func (service *customerService) GetBasedOnStripeID(ctx context.Context, id string) (*customer.Service, error) {
+	return service.storage.GetBasedOnStripeID(ctx, id)
+}
+
+func (service *customerService) GetBasedOnBoekhoudenID(ctx context.Context, id int64) (*customer.Service, error) {
+	return service.storage.GetBasedOnBoekhoudenID(ctx, id)
+}
+
 func (service *customerService) Create(ctx context.Context, item *customer.Service) error {
 	var err error
 	item.ID, err = id.New()
@@ -32,10 +45,9 @@ func (service *customerService) Create(ctx context.Context, item *customer.Servi
 		item.Code = item.Code[len(item.Code)-15:]
 	}
 	if item.Name != "" {
-		item.Company = item.Name
-	} else if item.Email != "" {
-		item.Company = item.Email
+		item.Name = item.Email
 	}
+	item.Type = customer.Business
 
 	if err := service.push.Create(ctx, item); err != nil {
 		return err
@@ -54,6 +66,12 @@ func (service *customerService) Update(ctx context.Context, item *customer.Servi
 		return err
 	}
 	item.Code = itemOld.Code
+
+	if item.Name != "" {
+		item.Name = item.Email
+	}
+	item.Type = customer.Business
+
 	if err := service.push.Update(ctx, item); err != nil {
 		return err
 	}

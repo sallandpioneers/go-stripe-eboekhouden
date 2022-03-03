@@ -1,6 +1,10 @@
 package push
 
-import "github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
+import (
+	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
+	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/invoice"
+	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/mutation"
+)
 
 type Push struct {
 	Soap *Soap
@@ -8,4 +12,6 @@ type Push struct {
 
 type Soap struct {
 	Customer customer.Pusher
+	Invoice  invoice.Pusher
+	Mutation mutation.Pusher
 }

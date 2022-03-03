@@ -236,7 +236,7 @@ type UpdateRelatie struct {
 type UpdateRelatieResponse struct {
 	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap UpdateRelatieResponse"`
 
-	UpdateRelatieResult *CError `xml:"ErrorMsg,omitempty" json:"ErrorMsg,omitempty"`
+	UpdateRelatieResult *CError `xml:"UpdateRelatieResult,omitempty" json:"UpdateRelatieResult,omitempty"`
 }
 
 type GetRelaties struct {
