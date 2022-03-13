@@ -18,27 +18,29 @@ func NewMutation(client eboekhouden.SoapAppSoap) (mutation.Pusher, error) {
 	}, nil
 }
 
-func (service *mutationPush) Create(ctx context.Context, item *mutation.Service, customerCode string) error {
+func (service *mutationPush) Create(ctx context.Context, item *mutation.Service) error {
 	session, err := GetSession()
 	if err != nil {
 		return err
 	}
+
+	mutationType := eboekhouden.EnMutatieSoortenFactuurVerstuurd
 
 	addMutation := &eboekhouden.AddMutatie{
 		SessionID:     session.SessionID,
 		SecurityCode2: session.SecurityCode2,
 		OMut: &eboekhouden.CMutatie{
 			MutatieNr:        0,
-			Soort:            nil,
+			Soort:            &mutationType,
 			Datum:            soap.CreateXsdDateTime(item.Date, false),
-			Rekening:         "",
-			RelatieCode:      customerCode,
+			Rekening:         "1300",
+			RelatieCode:      item.BoekhoudenCustomerID,
 			Factuurnummer:    item.InvoiceNumber,
-			Boekstuk:         "",
-			Omschrijving:     "",
-			Betalingstermijn: "",
-			Betalingskenmerk: "",
-			InExBTW:          "",
+			Boekstuk:         item.LedgerAccountCode,
+			Omschrijving:     item.Description,
+			Betalingstermijn: item.PaymentTerm,
+			Betalingskenmerk: item.PaymentFeature,
+			InExBTW:          string(mutation.Exclusice),
 			MutatieRegels: &eboekhouden.ArrayOfCMutatieRegel{
 				CMutatieRegel: make([]*eboekhouden.CMutatieRegel, len(item.Items)),
 			},
@@ -46,14 +48,16 @@ func (service *mutationPush) Create(ctx context.Context, item *mutation.Service,
 	}
 
 	for k, v := range item.Items {
-		addMutation.OMut.MutatieRegels.CMutatieRegel[k].BedragInvoer = v.Amount
-		addMutation.OMut.MutatieRegels.CMutatieRegel[k].BedragExclBTW = 0
-		addMutation.OMut.MutatieRegels.CMutatieRegel[k].BedragBTW = 0
-		addMutation.OMut.MutatieRegels.CMutatieRegel[k].BedragInclBTW = 0
-		addMutation.OMut.MutatieRegels.CMutatieRegel[k].BTWCode = ""
-		addMutation.OMut.MutatieRegels.CMutatieRegel[k].BTWPercentage = 0
-		addMutation.OMut.MutatieRegels.CMutatieRegel[k].TegenrekeningCode = v.LedgerAccountCode
-		addMutation.OMut.MutatieRegels.CMutatieRegel[k].KostenplaatsID = v.KostenplaatsID
+		addMutation.OMut.MutatieRegels.CMutatieRegel[k] = &eboekhouden.CMutatieRegel{
+			BedragInvoer:      v.Amount,
+			BedragExclBTW:     v.AmountExVAT,
+			BedragBTW:         v.AmountVAT,
+			BedragInclBTW:     v.AmountInVAT,
+			BTWCode:           string(v.VATCode),
+			BTWPercentage:     v.VATPercentage,
+			TegenrekeningCode: v.LedgerAccountCode,
+			KostenplaatsID:    v.KostenplaatsID,
+		}
 	}
 
 	resp, err := service.client.AddMutatieContext(ctx, addMutation)
@@ -66,9 +70,5 @@ func (service *mutationPush) Create(ctx context.Context, item *mutation.Service,
 		}
 	}
 
-	return nil
-}
-
-func (service *mutationPush) Update(ctx context.Context, item *mutation.Service, customerCode string) error {
 	return nil
 }

@@ -2,7 +2,7 @@ dir = $(shell pwd)
 
 include .env.makefile
 
-stripeContainer = docker run --rm -it --network=go-stripe-eboekhouden-net -e STRIPE_API_KEY=$$STRIPE_API_KEY stripe/stripe-cli:v1.7.13
+stripeContainer = docker run --rm -it --network=go-stripe-eboekhouden-net -e STRIPE_API_KEY=$$STRIPE_API_KEY stripe/stripe-cli:v1.8.0
 
 .PHONY: default
 default:

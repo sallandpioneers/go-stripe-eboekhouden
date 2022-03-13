@@ -14,22 +14,24 @@ const (
 )
 
 type Service struct {
-	ID               ulid.ULID
-	StripeID         string
-	CustomerID       ulid.ULID
-	StripeCustomerID string
-	MutationID       int64
-	Number           string
-	DueDate          time.Time
-	CollectionMethod string
-	Items            []ItemService
-	Subtotal         int64
-	Tax              int64
-	Total            int64
-	AmountDue        int64
-	AmountPaid       int64
-	AmountRemaining  int64
-	CreatedAt        time.Time
+	ID                   ulid.ULID
+	CustomerID           ulid.ULID
+	StripeID             string
+	StripeCustomerID     string
+	BoekhoudenCustomerID string
+	MutationID           int64
+	Number               string
+	DueDate              time.Time
+	CollectionMethod     string
+	Items                []ItemService
+	Subtotal             int64
+	Tax                  int64
+	Total                int64
+	AmountDue            int64
+	AmountPaid           int64
+	AmountRemaining      int64
+	InvoiceURL           string
+	CreatedAt            time.Time
 }
 
 type ItemService struct {
@@ -40,7 +42,12 @@ type ItemService struct {
 	Quantity        int64
 	Description     string
 	Amount          int64 // In Cents
-	BTWCode         string
+	TaxAmounts      []InvoiceTaxAmountService
 	// Unit              string
 	// Code              string
+}
+
+type InvoiceTaxAmountService struct {
+	Amount    int64
+	Inclusive bool
 }

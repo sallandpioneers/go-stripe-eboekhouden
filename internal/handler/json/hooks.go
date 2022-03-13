@@ -11,6 +11,7 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/stripe/stripe-go"
+	"github.com/stripe/stripe-go/plan"
 	"github.com/stripe/stripe-go/webhook"
 	"github.com/valyala/fasthttp"
 )
@@ -40,7 +41,7 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 
 	switch ev.Type {
 	case "invoice.created":
-		err = h.invoiceCreate(ev.Data.Raw)
+		err = nil
 	case "invoice.deleted":
 		// This will happen when a draft invoice has been deleted.
 		err = nil
@@ -55,7 +56,7 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 	case "invoice.paid":
 		// Send signal to RPI with noise that we got money
 		// Other data will be send through invoice.updated, so we dont have to worry about that
-		err = nil
+		err = h.invoicePaid(ev.Data.Raw)
 	case "invoice.payment_action_required":
 		// User is suppose to do some shit
 		// TODO figure out when this can happen
@@ -78,7 +79,7 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 		// This can be changed in dashboard: https://dashboard.stripe.com/settings/billing/automatic
 		err = nil
 	case "invoice.updated":
-		err = h.invoiceUpdate(ev.Data.Raw)
+		// err = h.invoiceUpdate(ev.Data.Raw)
 	case "invoice.voided":
 		// Invoice cannot be used anymore
 		err = nil
@@ -115,20 +116,33 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 	ctx.Response.SetStatusCode(fasthttp.StatusNoContent)
 }
 
-func (h *hooksHandler) invoiceCreate(data []byte) error {
+func (h *hooksHandler) invoicePaid(data []byte) error {
+	item, err := h.getInvoice(data)
+	if err != nil {
+		return err
+	}
+
+	if err := h.service.InvoicePaid(context.Background(), item); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (h *hooksHandler) getInvoice(data []byte) (*invoice.Service, error) {
 	var c stripe.Invoice
 	jsonIterator := h.jsonIteratorPool.BorrowIterator(data)
 	defer h.jsonIteratorPool.ReturnIterator(jsonIterator)
 	jsonIterator.ReadVal(&c)
 	if jsonIterator.Error != nil {
-		return jsonIterator.Error
+		return nil, jsonIterator.Error
 	}
 
 	item := &invoice.Service{
 		StripeID:         c.ID,
 		StripeCustomerID: c.Customer.ID,
 		Number:           c.Number,
-		DueDate:          time.Unix(0, c.DueDate),
+		DueDate:          time.Unix(c.DueDate, 0),
 		CollectionMethod: string(*c.CollectionMethod),
 		Items:            make([]invoice.ItemService, c.Lines.TotalCount),
 		Subtotal:         c.Subtotal,
@@ -137,38 +151,40 @@ func (h *hooksHandler) invoiceCreate(data []byte) error {
 		AmountDue:        c.AmountDue,
 		AmountPaid:       c.AmountPaid,
 		AmountRemaining:  c.AmountRemaining,
-		CreatedAt:        time.Unix(0, c.Created),
+		InvoiceURL:       c.InvoicePDF,
+		CreatedAt:        time.Unix(c.Created, 0),
 	}
 
 	for k, v := range c.Lines.Data {
+		var planID string
+		var productID string
+		if v.Plan == nil {
+
+		} else {
+			plan, err := plan.Get(v.Plan.ID, nil)
+			if err != nil {
+				return nil, err
+			}
+
+			productID = plan.Product.ID
+		}
+
 		item.Items[k].StripeID = v.ID
-		item.Items[k].StripePlanID = v.Plan.ID
+		if v.Plan != nil {
+			item.Items[k].StripePlanID = planID
+		}
+		item.Items[k].StripeProductID = productID
 		item.Items[k].Quantity = v.Quantity
 		item.Items[k].Description = v.Description
 		item.Items[k].Amount = v.Amount
+		item.Items[k].TaxAmounts = make([]invoice.InvoiceTaxAmountService, len(v.TaxAmounts))
+
+		for k2, v2 := range v.TaxAmounts {
+			item.Items[k].TaxAmounts[k2].Amount = v2.Amount
+			item.Items[k].TaxAmounts[k2].Inclusive = v2.Inclusive
+		}
 	}
-
-	if err := h.service.InvoiceCreate(context.Background(), item); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (h *hooksHandler) invoiceUpdate(data []byte) error {
-	var c stripe.Invoice
-	jsonIterator := h.jsonIteratorPool.BorrowIterator(data)
-	defer h.jsonIteratorPool.ReturnIterator(jsonIterator)
-	jsonIterator.ReadVal(&c)
-	if jsonIterator.Error != nil {
-		return jsonIterator.Error
-	}
-
-	if err := h.service.InvoiceUpdate(context.Background(), &invoice.Service{}); err != nil {
-		return err
-	}
-
-	return nil
+	return item, nil
 }
 
 func (h *hooksHandler) customerCreate(data []byte) error {
@@ -177,7 +193,6 @@ func (h *hooksHandler) customerCreate(data []byte) error {
 		return err
 	}
 	if err := h.service.CustomerCreate(context.Background(), item); err != nil {
-		log.Println(err)
 		return err
 	}
 	return nil

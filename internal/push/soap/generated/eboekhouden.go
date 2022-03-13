@@ -376,8 +376,6 @@ type CResultGetAdministraties struct {
 }
 
 type CError struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cError"`
-
 	LastErrorCode string `xml:"LastErrorCode,omitempty" json:"LastErrorCode,omitempty"`
 
 	LastErrorDescription string `xml:"LastErrorDescription,omitempty" json:"LastErrorDescription,omitempty"`
@@ -591,8 +589,6 @@ type CFactuurList struct {
 }
 
 type CMutatie struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cMutatie"`
-
 	MutatieNr int64 `xml:"MutatieNr,omitempty" json:"MutatieNr,omitempty"`
 
 	Soort *EnMutatieSoorten `xml:"Soort,omitempty" json:"Soort,omitempty"`
@@ -643,7 +639,7 @@ type CMutatieRegel struct {
 }
 
 type CResultAddMutatie struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cResultAddMutatie"`
+	XMLName xml.Name 
 
 	ErrorMsg *CError `xml:"ErrorMsg,omitempty" json:"ErrorMsg,omitempty"`
 
@@ -775,7 +771,7 @@ type ArrayOfCGrootboekrekening struct {
 }
 
 type CRelatie struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cRelatie"`
+	XMLName xml.Name
 
 	ID int64 `xml:"ID,omitempty" json:"ID,omitempty"`
 
@@ -863,7 +859,7 @@ type CRelatie struct {
 }
 
 type CResultAddRelatie struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cResultAddRelatie"`
+	XMLName xml.Name 
 
 	ErrorMsg *CError `xml:"ErrorMsg,omitempty" json:"ErrorMsg,omitempty"`
 
@@ -923,7 +919,7 @@ type COpenPost struct {
 }
 
 type CResultOpenSession struct {
-	XMLName xml.Name `xml:"http://www.e-boekhouden.nl/soap cResultOpenSession"`
+	XMLName xml.Name
 
 	ErrorMsg *CError `xml:"ErrorMsg,omitempty" json:"ErrorMsg,omitempty"`
 
