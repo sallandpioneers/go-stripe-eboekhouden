@@ -10,9 +10,9 @@ import (
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/invoice"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/stripe/stripe-go"
-	"github.com/stripe/stripe-go/plan"
-	"github.com/stripe/stripe-go/webhook"
+	"github.com/stripe/stripe-go/v72"
+	"github.com/stripe/stripe-go/v72/plan"
+	"github.com/stripe/stripe-go/v72/webhook"
 	"github.com/valyala/fasthttp"
 )
 
@@ -48,7 +48,7 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 	case "invoice.finalized":
 		// invoice is set to open, maybe send email to customer?
 		// Other data will be send through invoice.updated, so we dont have to worry about that
-		err = nil
+		err = h.InvoiceFinalized(ev.Data.Raw)
 	case "invoice.marked_uncollectible":
 		// End the subscription, this will be done by stripe, so dont do anything
 		// Other data will be send through invoice.updated, so we dont have to worry about that
@@ -116,6 +116,19 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 	ctx.Response.SetStatusCode(fasthttp.StatusNoContent)
 }
 
+func (h *hooksHandler) InvoiceFinalized(data []byte) error {
+	item, err := h.getInvoice(data)
+	if err != nil {
+		return err
+	}
+
+	if err := h.service.InvoiceFinalized(context.Background(), item); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (h *hooksHandler) invoicePaid(data []byte) error {
 	item, err := h.getInvoice(data)
 	if err != nil {
@@ -159,7 +172,7 @@ func (h *hooksHandler) getInvoice(data []byte) (*invoice.Service, error) {
 		var planID string
 		var productID string
 		if v.Plan == nil {
-
+			productID = v.Price.Product.ID
 		} else {
 			plan, err := plan.Get(v.Plan.ID, nil)
 			if err != nil {

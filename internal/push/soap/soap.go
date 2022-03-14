@@ -24,9 +24,6 @@ func New(p *push.Soap, c *config.EBoekHouden) error {
 	if p.Customer, err = NewCustomer(service); err != nil {
 		return err
 	}
-	if p.Invoice, err = NewInvoice(service); err != nil {
-		return err
-	}
 	if p.Mutation, err = NewMutation(service); err != nil {
 		return err
 	}

@@ -24,7 +24,7 @@ func (service *mutationPush) Create(ctx context.Context, item *mutation.Service)
 		return err
 	}
 
-	mutationType := eboekhouden.EnMutatieSoortenFactuurVerstuurd
+	mutationType := eboekhouden.EnMutatieSoorten(item.Type)
 
 	addMutation := &eboekhouden.AddMutatie{
 		SessionID:     session.SessionID,
@@ -33,14 +33,14 @@ func (service *mutationPush) Create(ctx context.Context, item *mutation.Service)
 			MutatieNr:        0,
 			Soort:            &mutationType,
 			Datum:            soap.CreateXsdDateTime(item.Date, false),
-			Rekening:         "1300",
+			Rekening:         item.LedgerAccountCode,
 			RelatieCode:      item.BoekhoudenCustomerID,
 			Factuurnummer:    item.InvoiceNumber,
 			Boekstuk:         item.LedgerAccountCode,
 			Omschrijving:     item.Description,
 			Betalingstermijn: item.PaymentTerm,
 			Betalingskenmerk: item.PaymentFeature,
-			InExBTW:          string(mutation.Exclusice),
+			InExBTW:          string(mutation.Exclusive),
 			MutatieRegels: &eboekhouden.ArrayOfCMutatieRegel{
 				CMutatieRegel: make([]*eboekhouden.CMutatieRegel, len(item.Items)),
 			},

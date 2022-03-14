@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"math"
 	"strconv"
@@ -14,15 +15,13 @@ import (
 )
 
 type invoiceService struct {
-	push     invoice.Pusher
 	mutation mutation.Servicer
 	cfg      *config.EBoekHouden
 }
 
-func NewInvoice(p invoice.Pusher, c *config.EBoekHouden) (invoice.Servicer, error) {
+func NewInvoice(c *config.EBoekHouden) (invoice.Servicer, error) {
 	return &invoiceService{
-		push: p,
-		cfg:  c,
+		cfg: c,
 	}, nil
 }
 
@@ -30,23 +29,26 @@ func (service *invoiceService) AddMutation(item mutation.Servicer) {
 	service.mutation = item
 }
 
-func (service *invoiceService) Paid(ctx context.Context, item *invoice.Service) error {
+func (service *invoiceService) Finalize(ctx context.Context, item *invoice.Service) error {
 	var ledgerAccountCode string
+	var description string
 	if len(item.Items) > 0 {
 		ledgerAccountCode = service.getLedgerAccountCode(item.Items[0].StripeProductID, item.Items[0].StripePlanID)
+		description = fmt.Sprintf("%s %s - %s\n%s", item.Items[0].Description, "28 feb.", "28 mrt.", item.InvoiceURL)
 	}
 
 	var err error
 	itemMutation := &mutation.Service{
 		BoekhoudenCustomerID: item.BoekhoudenCustomerID,
-		Type:                 mutation.InvoicePaymentSend,
+		Type:                 mutation.InvoiceSend,
 		Date:                 item.CreatedAt,
-		LedgerAccountCode:    ledgerAccountCode,
+		LedgerAccountCode:    "1300",
 		InvoiceNumber:        item.Number,
 		InvoiceURL:           item.InvoiceURL,
 		PaymentTerm:          strconv.Itoa(int(item.DueDate.Sub(time.Now()).Hours() / 24)),
 		PaymentFeature:       "", // !?
 		Items:                make([]mutation.ServiceItem, 0),
+		Description:          description,
 	}
 
 	if itemMutation.ID, err = id.New(); err != nil {
@@ -79,6 +81,60 @@ func (service *invoiceService) Paid(ctx context.Context, item *invoice.Service) 
 		VATPercentage:     vatPercentage,
 		LedgerAccountCode: ledgerAccountCode,
 	})
+
+	if err := service.mutation.Create(ctx, itemMutation); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (service *invoiceService) Paid(ctx context.Context, item *invoice.Service) error {
+	var err error
+	itemMutation := &mutation.Service{
+		BoekhoudenCustomerID: item.BoekhoudenCustomerID,
+		Type:                 mutation.InvoicePaymentSend,
+		Date:                 item.CreatedAt,
+		LedgerAccountCode:    "1010",
+		InvoiceNumber:        item.Number,
+		InvoiceURL:           item.InvoiceURL,
+		PaymentTerm:          strconv.Itoa(int(item.DueDate.Sub(time.Now()).Hours() / 24)),
+		PaymentFeature:       "", // !?
+		Items:                make([]mutation.ServiceItem, 0),
+		Description:          fmt.Sprintf("Professional 28 feb. = 28 mrt. 2022\n%s", item.InvoiceURL),
+	}
+
+	if itemMutation.ID, err = id.New(); err != nil {
+		return err
+	}
+
+	var amountVAT int64 = 0
+	var amount int64 = 0
+	for _, v := range item.Items {
+		for _, v := range v.TaxAmounts {
+			amountVAT += v.Amount
+		}
+
+		amount += v.Amount * v.Quantity
+	}
+
+	amountF := float64(amount) / 100
+	amountVATF := float64(amountVAT) / 100
+	vatPercentage := amountVATF / amountF * 100
+	if math.IsNaN(vatPercentage) {
+		vatPercentage = 0
+	}
+
+	itemMutation.Items = append(itemMutation.Items, mutation.ServiceItem{
+		Amount:            amountF,
+		AmountExVAT:       amountF,
+		AmountVAT:         amountVATF,
+		AmountInVAT:       amountF + amountVATF,
+		VATCode:           mutation.VATHighSales21,
+		VATPercentage:     vatPercentage,
+		LedgerAccountCode: "1300",
+	})
+
+	fmt.Printf("itemMutation: %+v\n", itemMutation)
 
 	if err := service.mutation.Create(ctx, itemMutation); err != nil {
 		return err

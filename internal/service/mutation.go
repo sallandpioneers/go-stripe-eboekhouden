@@ -17,7 +17,6 @@ func NewMutation(p mutation.Pusher) (mutation.Servicer, error) {
 }
 
 func (service *mutationService) Create(ctx context.Context, item *mutation.Service) error {
-	item.SetDescription()
 	if err := service.push.Create(ctx, item); err != nil {
 		return err
 	}

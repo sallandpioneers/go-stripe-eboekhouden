@@ -1,7 +1,6 @@
 package mutation
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/oklog/ulid"
@@ -21,7 +20,7 @@ const (
 	Memorial               Type = "Memoriaal"
 
 	Inclusive TaxType = "IN"
-	Exclusice TaxType = "EX"
+	Exclusive TaxType = "EX"
 
 	VATHighSales           VATCode = "HOOG_VERK"    // VAT High, sales 19%
 	VATHighSales21         VATCode = "HOOG_VERK_21" // VAT High, sales 21%
@@ -49,10 +48,6 @@ type Service struct {
 	PaymentFeature       string
 	InExBtw              TaxType
 	Items                []ServiceItem
-}
-
-func (item *Service) SetDescription() {
-	item.Description = fmt.Sprintf("Professional 28 feb. = 28 mrt. 2022\n%s", item.InvoiceURL)
 }
 
 type ServiceItem struct {
