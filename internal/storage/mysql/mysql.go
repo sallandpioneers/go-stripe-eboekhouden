@@ -11,7 +11,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql" // The driver used for MySQL
-	"github.com/golang-migrate/migrate"
+	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/mysql" // The driver used for MySQL
 
 	"github.com/aceworksdev/go-stripe-eboekhouden/internal"
@@ -44,7 +44,6 @@ func New(c *config.StorageMySQL, s *storage.Storage, sa *internal.ServicesAvaila
 }
 
 func NewConnection(config *config.StorageMySQL, dbs *DBs, servicesAvailable *internal.ServicesAvailable, errs chan error) {
-
 	go func() {
 		l := log.New(os.Stdout, "[DATABASE][ERROR]", 0)
 		for {

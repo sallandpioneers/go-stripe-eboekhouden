@@ -34,7 +34,7 @@ bench:
 
 .PHONY: migrate
 migrate:
-	docker-compose exec go_stripe_boekhouden_api /go-stripe-eboekhouden/go-stripe-eboekhouden migrate up --mysql-conn "mysql://user:password@tcp(db:3306)/db"
+	docker-compose exec go_stripe_boekhouden_api /go-stripe-eboekhouden/go-stripe-eboekhouden migrate up --mysql-conn "mysql://user:password@tcp(go_stripe_boekhouden_db:3306)/db"
 
 .PHONY: status
 status:
