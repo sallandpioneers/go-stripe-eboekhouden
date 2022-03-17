@@ -1,4 +1,4 @@
-FROM golang:1.17.2 as build_base
+FROM golang:1.17.8 as build_base
 
 # Set the Current Working Directory inside the container
 WORKDIR /go-stripe-eboekhouden

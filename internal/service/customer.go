@@ -40,9 +40,9 @@ func (service *customerService) Create(ctx context.Context, item *customer.Servi
 		return err
 	}
 
-	item.Code = strings.TrimPrefix(item.StripeID, "cus_")
-	if len(item.Code) > 15 {
-		item.Code = item.Code[len(item.Code)-15:]
+	item.BoekhoudenID = strings.TrimPrefix(item.StripeID, "cus_")
+	if len(item.BoekhoudenID) > 15 {
+		item.BoekhoudenID = item.BoekhoudenID[len(item.BoekhoudenID)-15:]
 	}
 	if item.Name != "" {
 		item.Name = item.Email
@@ -65,7 +65,7 @@ func (service *customerService) Update(ctx context.Context, item *customer.Servi
 	if err != nil {
 		return err
 	}
-	item.Code = itemOld.Code
+	item.BoekhoudenID = itemOld.BoekhoudenID
 
 	if item.Name != "" {
 		item.Name = item.Email

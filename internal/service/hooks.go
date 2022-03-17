@@ -25,25 +25,29 @@ func (service *hooksService) AddInvoice(item invoice.Servicer) {
 	service.invoice = item
 }
 
-func (service *hooksService) InvoiceCreate(ctx context.Context, item *invoice.Service) error {
+func (service *hooksService) InvoiceFinalized(ctx context.Context, item *invoice.Service) error {
 	itemCustomer, err := service.customer.GetBasedOnStripeID(ctx, item.StripeCustomerID)
 	if err != nil {
 		return err
 	}
 
-	if err := service.invoice.Create(ctx, item, itemCustomer.Code); err != nil {
+	item.BoekhoudenCustomerID = itemCustomer.BoekhoudenID
+
+	if err := service.invoice.Finalize(ctx, item); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (service *hooksService) InvoiceUpdate(ctx context.Context, item *invoice.Service) error {
+func (service *hooksService) InvoicePaid(ctx context.Context, item *invoice.Service) error {
 	itemCustomer, err := service.customer.GetBasedOnStripeID(ctx, item.StripeCustomerID)
 	if err != nil {
 		return err
 	}
 
-	if err := service.invoice.Update(ctx, item, itemCustomer.Code); err != nil {
+	item.BoekhoudenCustomerID = itemCustomer.BoekhoudenID
+
+	if err := service.invoice.Paid(ctx, item); err != nil {
 		return err
 	}
 	return nil

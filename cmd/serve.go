@@ -42,6 +42,12 @@ var serveCommand = &cobra.Command{
 		// Set stripe ID
 		stripe.Key = c.Stripe.Key
 
+		stripe.SetAppInfo(&stripe.AppInfo{
+			Name:    "go-stripe-eboekhouding",
+			URL:     "https://github.com/AceWorksDev/go-stripe-eboekhouden",
+			Version: "0.0.1",
+		})
+
 		// Init Server
 		serve := server.New(c.Server)
 		client := server.NewClient(c.Client)

@@ -17,3 +17,4 @@
 
 .env.makefile
 go-stripe-eboekhouden
+internal/push/soap/generated/*

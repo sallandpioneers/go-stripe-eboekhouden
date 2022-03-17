@@ -13,10 +13,10 @@ func New(s *service.Service, db *storage.Storage, p *push.Push, c *fasthttp.Clie
 	if s.Customer, err = NewCustomer(db.Customer, p.Soap.Customer); err != nil {
 		return err
 	}
-	if s.Invoice, err = NewInvoice(p.Soap.Invoice); err != nil {
+	if s.Invoice, err = NewInvoice(cfg.EBoekHouden); err != nil {
 		return err
 	}
-	if s.Mutation, err = NewMutation(p.Soap.Mutation, cfg.EBoekHouden); err != nil {
+	if s.Mutation, err = NewMutation(p.Soap.Mutation); err != nil {
 		return err
 	}
 	if s.Hooks, err = NewHooks(); err != nil {

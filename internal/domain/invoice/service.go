@@ -9,6 +9,6 @@ import (
 type Servicer interface {
 	AddMutation(item mutation.Servicer)
 
-	Create(ctx context.Context, item *Service, customerCode string) error
-	Update(ctx context.Context, item *Service, customerCode string) error
+	Finalize(ctx context.Context, item *Service) error
+	Paid(ctx context.Context, item *Service) error
 }

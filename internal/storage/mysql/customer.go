@@ -25,7 +25,7 @@ func (storage *customerStorage) Create(ctx context.Context, item *customer.Servi
 		ID:             item.ID,
 		StripeID:       item.StripeID,
 		BoekhoudenID:   item.RelationID,
-		BoekhoudenCode: item.Code,
+		BoekhoudenCode: item.BoekhoudenID,
 	}
 
 	if err := storage.queries.CreateCustomer(ctx, arg); err != nil {
@@ -40,10 +40,10 @@ func (storage *customerStorage) Get(ctx context.Context, id ulid.ULID) (*custome
 		return nil, err
 	}
 	return &customer.Service{
-		ID:         dbRecord.ID,
-		StripeID:   dbRecord.StripeID,
-		RelationID: dbRecord.BoekhoudenID,
-		Code:       dbRecord.BoekhoudenCode,
+		ID:           dbRecord.ID,
+		StripeID:     dbRecord.StripeID,
+		RelationID:   dbRecord.BoekhoudenID,
+		BoekhoudenID: dbRecord.BoekhoudenCode,
 	}, nil
 }
 
@@ -53,10 +53,10 @@ func (storage *customerStorage) GetBasedOnStripeID(ctx context.Context, id strin
 		return nil, err
 	}
 	return &customer.Service{
-		ID:         dbRecord.ID,
-		StripeID:   dbRecord.StripeID,
-		RelationID: dbRecord.BoekhoudenID,
-		Code:       dbRecord.BoekhoudenCode,
+		ID:           dbRecord.ID,
+		StripeID:     dbRecord.StripeID,
+		RelationID:   dbRecord.BoekhoudenID,
+		BoekhoudenID: dbRecord.BoekhoudenCode,
 	}, nil
 }
 
@@ -66,9 +66,9 @@ func (storage *customerStorage) GetBasedOnBoekhoudenID(ctx context.Context, id i
 		return nil, err
 	}
 	return &customer.Service{
-		ID:         dbRecord.ID,
-		StripeID:   dbRecord.StripeID,
-		RelationID: dbRecord.BoekhoudenID,
-		Code:       dbRecord.BoekhoudenCode,
+		ID:           dbRecord.ID,
+		StripeID:     dbRecord.StripeID,
+		RelationID:   dbRecord.BoekhoudenID,
+		BoekhoudenID: dbRecord.BoekhoudenCode,
 	}, nil
 }
