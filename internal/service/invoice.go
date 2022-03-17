@@ -92,7 +92,7 @@ func (service *invoiceService) Paid(ctx context.Context, item *invoice.Service) 
 	var err error
 	itemMutation := &mutation.Service{
 		BoekhoudenCustomerID: item.BoekhoudenCustomerID,
-		Type:                 mutation.InvoicePaymentSend,
+		Type:                 mutation.InvoicePaymentReceived,
 		Date:                 item.CreatedAt,
 		LedgerAccountCode:    "1010",
 		InvoiceNumber:        item.Number,

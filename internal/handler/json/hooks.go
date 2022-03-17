@@ -12,6 +12,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 	"github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/plan"
+	"github.com/stripe/stripe-go/v72/transfer"
 	"github.com/stripe/stripe-go/v72/webhook"
 	"github.com/valyala/fasthttp"
 )
@@ -102,7 +103,9 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 	case "setup_intent.succeeded":
 		err = nil
 	case "setup_intent.setup_failed":
-
+		err = nil
+	case "payout.paid":
+		err = h.payoutPaid(ev.Data.Raw)
 	default:
 		log.Printf("webhook not supported\t\t\t%s", ev.Type)
 		err = nil
@@ -114,6 +117,26 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 		return
 	}
 	ctx.Response.SetStatusCode(fasthttp.StatusNoContent)
+}
+
+func (h *hooksHandler) payoutPaid(data []byte) error {
+	var c stripe.Payout
+	jsonIterator := h.jsonIteratorPool.BorrowIterator(data)
+	defer h.jsonIteratorPool.ReturnIterator(jsonIterator)
+	jsonIterator.ReadVal(&c)
+	if jsonIterator.Error != nil {
+		return jsonIterator.Error
+	}
+
+	t, _ := transfer.Get(c.ID, nil)
+	log.Println(t)
+
+	t, _ = transfer.Get("po_1Ke7iCBrr18AunNBFtUELFcS/transactions?from_stmt=true&count=20&expand%5B%5D=data.charge", &stripe.TransferParams{
+		Params: stripe.Params{},
+	})
+	log.Println(t)
+
+	return nil
 }
 
 func (h *hooksHandler) InvoiceFinalized(data []byte) error {

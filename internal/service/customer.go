@@ -44,7 +44,7 @@ func (service *customerService) Create(ctx context.Context, item *customer.Servi
 	if len(item.BoekhoudenID) > 15 {
 		item.BoekhoudenID = item.BoekhoudenID[len(item.BoekhoudenID)-15:]
 	}
-	if item.Name != "" {
+	if item.Name == "" {
 		item.Name = item.Email
 	}
 	item.Type = customer.Business
@@ -67,7 +67,7 @@ func (service *customerService) Update(ctx context.Context, item *customer.Servi
 	}
 	item.BoekhoudenID = itemOld.BoekhoudenID
 
-	if item.Name != "" {
+	if item.Name == "" {
 		item.Name = item.Email
 	}
 	item.Type = customer.Business

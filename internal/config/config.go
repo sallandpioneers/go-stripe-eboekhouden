@@ -75,6 +75,8 @@ type EBoekHouden struct {
 	UseLedgerAccountCodeForAll     bool
 	UseLedgerAccountCodePerProduct bool
 	UseLedgerAccountCodePerPlan    bool
+	LedgerAccountCodeDebtors       string
+	LedgerAccountCodeBank          string
 	LedgerAccountCodeDefault       string
 	LedgerAccountCodeProducts      map[string]string
 	LedgerAccountCodePlans         map[string]string
