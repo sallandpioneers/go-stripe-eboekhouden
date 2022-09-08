@@ -1,10 +1,10 @@
 package json
 
 import (
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/handler"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/service"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/handler"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/service"
 
 	jsoniter "github.com/json-iterator/go"
 )

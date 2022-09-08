@@ -1,12 +1,11 @@
-module github.com/aceworksdev/go-stripe-eboekhouden
+module github.com/sallandpioneers/go-stripe-eboekhouden
 
-go 1.17
-
+go 1.19
+ 
 require (
 	github.com/fasthttp/router v1.4.6
 	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/golang-migrate/migrate/v4 v4.15.1
 	github.com/hooklift/gowsdl v0.5.0
 	github.com/json-iterator/go v1.1.12
@@ -14,7 +13,6 @@ require (
 	github.com/oklog/ulid v1.3.1
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
-	github.com/stripe/stripe-go v70.15.0+incompatible
 	github.com/stripe/stripe-go/v72 v72.87.0
 	github.com/valyala/fasthttp v1.33.0
 )

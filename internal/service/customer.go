@@ -4,9 +4,9 @@ import (
 	"context"
 	"strings"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/utils/id"
 	"github.com/oklog/ulid"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/customer"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/utils/id"
 )
 
 type customerService struct {

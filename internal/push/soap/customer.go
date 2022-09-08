@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
-	eboekhouden "github.com/aceworksdev/go-stripe-eboekhouden/internal/push/soap/generated"
 	"github.com/hooklift/gowsdl/soap"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/customer"
+	eboekhouden "github.com/sallandpioneers/go-stripe-eboekhouden/internal/push/soap/generated"
 )
 
 type customerPush struct {

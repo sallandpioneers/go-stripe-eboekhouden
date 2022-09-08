@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/invoice"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/mutation"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/utils/id"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/invoice"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/mutation"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/utils/id"
 )
 
 type invoiceService struct {
@@ -42,10 +42,10 @@ func (service *invoiceService) Finalize(ctx context.Context, item *invoice.Servi
 		BoekhoudenCustomerID: item.BoekhoudenCustomerID,
 		Type:                 mutation.InvoiceSend,
 		Date:                 item.CreatedAt,
-		LedgerAccountCode:    "1300",
+		LedgerAccountCode:    service.cfg.LedgerAccountCodeDebtors,
 		InvoiceNumber:        item.Number,
 		InvoiceURL:           item.InvoiceURL,
-		PaymentTerm:          strconv.Itoa(int(item.DueDate.Sub(time.Now()).Hours() / 24)),
+		PaymentTerm:          strconv.Itoa(int(time.Until(item.DueDate).Hours() / 24)),
 		PaymentFeature:       "", // !?
 		Items:                make([]mutation.ServiceItem, 0),
 		Description:          description,
@@ -97,7 +97,7 @@ func (service *invoiceService) Paid(ctx context.Context, item *invoice.Service) 
 		LedgerAccountCode:    "1010",
 		InvoiceNumber:        item.Number,
 		InvoiceURL:           item.InvoiceURL,
-		PaymentTerm:          strconv.Itoa(int(item.DueDate.Sub(time.Now()).Hours() / 24)),
+		PaymentTerm:          strconv.Itoa(int(time.Until(item.DueDate).Hours() / 24)),
 		PaymentFeature:       "", // !?
 		Items:                make([]mutation.ServiceItem, 0),
 		Description:          fmt.Sprintf("Professional 28 feb. = 28 mrt. 2022\n%s", item.InvoiceURL),

@@ -5,9 +5,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/hooks"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/invoice"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/customer"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/hooks"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/invoice"
 
 	jsoniter "github.com/json-iterator/go"
 	"github.com/stripe/stripe-go/v72"
@@ -57,7 +57,7 @@ func (h *hooksHandler) AllHooks(ctx *fasthttp.RequestCtx) {
 	case "invoice.paid":
 		// Send signal to RPI with noise that we got money
 		// Other data will be send through invoice.updated, so we dont have to worry about that
-		err = h.invoicePaid(ev.Data.Raw)
+		// err = h.invoicePaid(ev.Data.Raw)
 	case "invoice.payment_action_required":
 		// User is suppose to do some shit
 		// TODO figure out when this can happen

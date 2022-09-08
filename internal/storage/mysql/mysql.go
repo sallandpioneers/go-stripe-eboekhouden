@@ -14,11 +14,11 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/mysql" // The driver used for MySQL
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/storage"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/storage/mysql/migrations"
-	queries "github.com/aceworksdev/go-stripe-eboekhouden/internal/storage/mysql/queries/generated"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/storage"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/storage/mysql/migrations"
+	queries "github.com/sallandpioneers/go-stripe-eboekhouden/internal/storage/mysql/queries/generated"
 )
 
 var registerDriverOnce sync.Once

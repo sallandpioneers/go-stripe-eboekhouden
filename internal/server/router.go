@@ -3,9 +3,9 @@ package server
 import (
 	"log"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/handler"
 	"github.com/fasthttp/router"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/handler"
 	"github.com/valyala/fasthttp"
 )
 
@@ -28,7 +28,7 @@ func NewRouter(s *fasthttp.Server, h *handler.Handler, config *config.Router) *r
 	return r
 }
 
-//nolint function to long
+// nolint function to long
 func initRoutes(r *router.Router, h *handler.Handler) {
 	r.POST("/hooks", h.Hooks.AllHooks)
 }

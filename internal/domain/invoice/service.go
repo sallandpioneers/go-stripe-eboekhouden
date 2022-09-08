@@ -3,7 +3,7 @@ package invoice
 import (
 	"context"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/mutation"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/mutation"
 )
 
 type Servicer interface {

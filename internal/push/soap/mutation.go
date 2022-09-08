@@ -3,9 +3,9 @@ package soap
 import (
 	"context"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/mutation"
-	eboekhouden "github.com/aceworksdev/go-stripe-eboekhouden/internal/push/soap/generated"
 	"github.com/hooklift/gowsdl/soap"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/mutation"
+	eboekhouden "github.com/sallandpioneers/go-stripe-eboekhouden/internal/push/soap/generated"
 )
 
 type mutationPush struct {

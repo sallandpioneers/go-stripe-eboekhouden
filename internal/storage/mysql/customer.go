@@ -3,9 +3,9 @@ package mysql
 import (
 	"context"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
-	queries "github.com/aceworksdev/go-stripe-eboekhouden/internal/storage/mysql/queries/generated"
 	"github.com/oklog/ulid"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/customer"
+	queries "github.com/sallandpioneers/go-stripe-eboekhouden/internal/storage/mysql/queries/generated"
 )
 
 type customerStorage struct {

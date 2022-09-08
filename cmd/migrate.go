@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/storage/mysql"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/storage/mysql"
 	"github.com/spf13/cobra"
 )
 

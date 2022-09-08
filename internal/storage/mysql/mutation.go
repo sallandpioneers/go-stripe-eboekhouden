@@ -1,8 +1,8 @@
 package mysql
 
 import (
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/mutation"
-	queries "github.com/aceworksdev/go-stripe-eboekhouden/internal/storage/mysql/queries/generated"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/mutation"
+	queries "github.com/sallandpioneers/go-stripe-eboekhouden/internal/storage/mysql/queries/generated"
 )
 
 type mutationStorager struct {

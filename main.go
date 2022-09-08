@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/cmd"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/cmd"
 
 	"github.com/spf13/cobra"
 )

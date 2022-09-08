@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/handler"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/push"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server"
-	handlerStruct "github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/handler"
-	pushStruct "github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/push"
-	serviceStruct "github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/service"
-	storageStruct "github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/storage"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/service"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/storage"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/utils/id"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/handler"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/push"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server"
+	handlerStruct "github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/handler"
+	pushStruct "github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/push"
+	serviceStruct "github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/service"
+	storageStruct "github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/storage"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/service"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/storage"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/utils/id"
 
 	"github.com/spf13/cobra"
 	"github.com/stripe/stripe-go/v72"
@@ -44,7 +44,7 @@ var serveCommand = &cobra.Command{
 
 		stripe.SetAppInfo(&stripe.AppInfo{
 			Name:    "go-stripe-eboekhouding",
-			URL:     "https://github.com/AceWorksDev/go-stripe-eboekhouden",
+			URL:     "https://github.com/sallandpioneers/go-stripe-eboekhouden",
 			Version: "0.0.1",
 		})
 

@@ -1,10 +1,10 @@
 package service
 
 import (
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/push"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/service"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/storage"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/push"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/service"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/storage"
 	"github.com/valyala/fasthttp"
 )
 

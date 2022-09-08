@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
-	eboekhouden "github.com/aceworksdev/go-stripe-eboekhouden/internal/push/soap/generated"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/push"
 	"github.com/hooklift/gowsdl/soap"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
+	eboekhouden "github.com/sallandpioneers/go-stripe-eboekhouden/internal/push/soap/generated"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/push"
 )
 
 func New(p *push.Soap, c *config.EBoekHouden) error {

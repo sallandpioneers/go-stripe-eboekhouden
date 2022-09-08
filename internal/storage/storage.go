@@ -5,10 +5,10 @@ import (
 	"log"
 	"strings"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/server/domain/storage"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/storage/mysql"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/storage"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/storage/mysql"
 )
 
 func New(s *storage.Storage, dbConfig *config.AllDB, sa *internal.ServicesAvailable) error {

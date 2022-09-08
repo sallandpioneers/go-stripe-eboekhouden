@@ -3,8 +3,8 @@ package hooks
 import (
 	"context"
 
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/customer"
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/domain/invoice"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/customer"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/invoice"
 )
 
 type Servicer interface {

@@ -1,10 +1,10 @@
-FROM golang:1.17.8
+FROM golang:1.19.1
 
 # Set the Current Working Directory inside the container
 WORKDIR /go-stripe-eboekhouden
 
 COPY . .
-
+ 
 RUN ["go", "install", "github.com/hooklift/gowsdl/...@master"]
 RUN ["go", "install", "github.com/githubnemo/CompileDaemon@latest"]
 RUN ["go", "install", "github.com/kyleconroy/sqlc/cmd/sqlc@latest"]

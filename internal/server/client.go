@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/aceworksdev/go-stripe-eboekhouden/internal/config"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
 	"github.com/valyala/fasthttp"
 )
 
