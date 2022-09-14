@@ -18,7 +18,7 @@ import (
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/utils/id"
 
 	"github.com/spf13/cobra"
-	"github.com/stripe/stripe-go/v72"
+	"github.com/stripe/stripe-go/v73"
 )
 
 //nolint:gochecknoinits // this is the recommended way to use cobra

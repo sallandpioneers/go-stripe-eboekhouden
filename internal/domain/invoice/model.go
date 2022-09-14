@@ -42,6 +42,8 @@ type ItemService struct {
 	Quantity        int64
 	Description     string
 	Amount          int64 // In Cents
+	PeriodStart     time.Time
+	PeriodEnd       time.Time
 	TaxAmounts      []InvoiceTaxAmountService
 	// Unit              string
 	// Code              string

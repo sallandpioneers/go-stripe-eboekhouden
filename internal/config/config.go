@@ -69,17 +69,21 @@ type StorageMySQL struct {
 }
 
 type EBoekHouden struct {
-	Username                       string
-	SecurityCode1                  string
-	SecurityCode2                  string
-	UseLedgerAccountCodeForAll     bool
-	UseLedgerAccountCodePerProduct bool
-	UseLedgerAccountCodePerPlan    bool
-	LedgerAccountCodeDebtors       string
-	LedgerAccountCodeBank          string
-	LedgerAccountCodeDefault       string
-	LedgerAccountCodeProducts      map[string]string
-	LedgerAccountCodePlans         map[string]string
+	Username             string
+	SecurityCode1        string
+	SecurityCode2        string
+	UseLedgerAccountCode struct {
+		ForAll     bool
+		PerProduct bool
+		PerPlan    bool
+	}
+	LedgerAccountCode struct {
+		Debtors  string
+		Bank     string
+		Default  string
+		Products map[string]string
+		Plans    map[string]string
+	}
 }
 
 type Stripe struct {

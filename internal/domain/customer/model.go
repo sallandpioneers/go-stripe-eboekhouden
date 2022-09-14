@@ -16,6 +16,7 @@ type Service struct {
 	StripeID     string
 	BoekhoudenID string
 	Name         string
+	Balance      int64
 
 	RelationID int64
 	Contact    string
@@ -43,4 +44,10 @@ type Service struct {
 	IBAN       string
 	BIC        string
 	Type       Type
+}
+
+type BalanceUpdate struct {
+	HasChanged bool
+	OldBalance int64
+	NewBalance int64
 }

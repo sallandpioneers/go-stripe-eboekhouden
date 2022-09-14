@@ -5,6 +5,7 @@ import (
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/hooks"
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/invoice"
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/mutation"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/domain/payout"
 )
 
 type Service struct {
@@ -12,4 +13,5 @@ type Service struct {
 	Customer customer.Servicer
 	Invoice  invoice.Servicer
 	Mutation mutation.Servicer
+	Payout   payout.Servicer
 }

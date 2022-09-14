@@ -19,14 +19,20 @@ func New(s *service.Service, db *storage.Storage, p *push.Push, c *fasthttp.Clie
 	if s.Mutation, err = NewMutation(p.Soap.Mutation); err != nil {
 		return err
 	}
+	if s.Payout, err = NewPayout(cfg.EBoekHouden); err != nil {
+		return err
+	}
 	if s.Hooks, err = NewHooks(); err != nil {
 		return err
 	}
 
 	s.Hooks.AddCustomer(s.Customer)
 	s.Hooks.AddInvoice(s.Invoice)
+	s.Hooks.AddPayout(s.Payout)
 
+	s.Customer.AddMutation(s.Mutation)
 	s.Invoice.AddMutation(s.Mutation)
+	s.Payout.AddMutation(s.Mutation)
 
 	return nil
 }

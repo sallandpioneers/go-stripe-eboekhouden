@@ -2,7 +2,7 @@ dir = $(shell pwd)
 
 include .env.makefile
 
-stripeContainer = docker run --rm -it --network=go-stripe-eboekhouden-net -e STRIPE_API_KEY=$$STRIPE_API_KEY stripe/stripe-cli:v1.11.3
+stripeContainer = docker run --rm -it --network=go-stripe-eboekhouden-net -e STRIPE_API_KEY=$$STRIPE_API_KEY stripe/stripe-cli:v1.12.0
 
 .PHONY: default
 default:
@@ -51,4 +51,4 @@ sqlc:
 
 .PHONY: listen
 listen:
-	$(stripeContainer) listen -f go_stripe_boekhouden_api:8080/hooks
+	$(stripeContainer) listen -l -f go_stripe_boekhouden_api:8080/hooks
