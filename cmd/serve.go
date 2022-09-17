@@ -7,6 +7,7 @@ import (
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal"
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/handler"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/payment"
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/push"
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server"
 	handlerStruct "github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/handler"
@@ -39,9 +40,6 @@ var serveCommand = &cobra.Command{
 			log.Fatal("[CONFIG] ", err)
 		}
 
-		// Set stripe ID
-		stripe.Key = c.Stripe.Key
-
 		stripe.SetAppInfo(&stripe.AppInfo{
 			Name:    "go-stripe-eboekhouding",
 			URL:     "https://github.com/sallandpioneers/go-stripe-eboekhouden",
@@ -67,22 +65,28 @@ var serveCommand = &cobra.Command{
 			log.Fatal(err)
 		}
 
+		paym, err := payment.New(c.Payment)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		// Build service layer
 		serv := &serviceStruct.Service{}
-		if err := service.New(serv, s, p, client, c); err != nil {
+		if err := service.New(serv, s, paym, p, client, c); err != nil {
 			log.Fatal(err)
 		}
 
 		// Build hand layer. JSON
 		hand := &handlerStruct.Handler{}
-		err := handler.New("json", hand, serv, sa, c)
-		if err != nil {
+		if err := handler.New("json", hand, serv, sa, c); err != nil {
 			log.Fatal(err)
 		}
 
 		server.NewRouter(serve, hand, c.Router)
 
 		id.NewULID()
+
+		serv.Report.Create()
 
 		log.Printf("Starting up go-stripe-eboekhouden back-end, listening on port: %d\n", c.Server.Port)
 		log.Fatal(serve.ListenAndServe(fmt.Sprintf(":%d", c.Server.Port)))

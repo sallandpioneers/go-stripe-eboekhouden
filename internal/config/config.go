@@ -15,9 +15,18 @@ type Config struct {
 
 	DB          *AllDB
 	EBoekHouden *EBoekHouden
-	Stripe      *Stripe
+	Payment     *Payment
 }
 
+type Payment struct {
+	Current string
+	Stripe  *Stripe
+}
+
+type Stripe struct {
+	Key    string
+	Secret string
+}
 type Client struct {
 	ReadTimeout     time.Duration
 	ReadBufferSize  int
@@ -86,15 +95,10 @@ type EBoekHouden struct {
 	}
 }
 
-type Stripe struct {
-	Key    string
-	Secret string
-}
-
 func (c *Config) Validate() error {
 	return validation.ValidateStruct(c,
 		validation.Field(&c.EBoekHouden),
-		validation.Field(&c.Stripe),
+		validation.Field(&c.Payment),
 	)
 }
 
@@ -106,6 +110,17 @@ func (c EBoekHouden) Validate() error {
 			validation.Required),
 		validation.Field(&c.SecurityCode2,
 			validation.Required),
+	)
+}
+
+func (c Payment) Validate() error {
+	return validation.ValidateStruct(&c,
+		validation.Field(&c.Current,
+			validation.Required),
+		validation.Field(&c.Stripe,
+			validation.When(c.Current == "stripe",
+				validation.Required),
+		),
 	)
 }
 
@@ -139,9 +154,12 @@ func New() (config *Config) {
 			SecurityCode1: "",
 			SecurityCode2: "",
 		},
-		Stripe: &Stripe{
-			Key:    "",
-			Secret: "",
+		Payment: &Payment{
+			Current: "stripe",
+			Stripe: &Stripe{
+				Key:    "",
+				Secret: "",
+			},
 		},
 	}
 

@@ -2,13 +2,14 @@ package service
 
 import (
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/config"
+	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/payment"
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/push"
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/service"
 	"github.com/sallandpioneers/go-stripe-eboekhouden/internal/server/domain/storage"
 	"github.com/valyala/fasthttp"
 )
 
-func New(s *service.Service, db *storage.Storage, p *push.Push, c *fasthttp.Client, cfg *config.Config) error {
+func New(s *service.Service, db *storage.Storage, paym payment.Service, p *push.Push, c *fasthttp.Client, cfg *config.Config) error {
 	var err error
 	if s.Customer, err = NewCustomer(db.Customer, p.Soap.Customer); err != nil {
 		return err
@@ -23,6 +24,9 @@ func New(s *service.Service, db *storage.Storage, p *push.Push, c *fasthttp.Clie
 		return err
 	}
 	if s.Hooks, err = NewHooks(); err != nil {
+		return err
+	}
+	if s.Report, err = NewReport(paym); err != nil {
 		return err
 	}
 
