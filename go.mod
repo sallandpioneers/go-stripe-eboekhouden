@@ -13,9 +13,10 @@ require (
 	github.com/oklog/ulid v1.3.1
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
-	github.com/stripe/stripe-go/v72 v72.87.0
 	github.com/valyala/fasthttp v1.33.0
 )
+
+require github.com/stripe/stripe-go/v73 v73.8.0
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
@@ -34,7 +35,6 @@ require (
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stripe/stripe-go/v73 v73.8.0 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect

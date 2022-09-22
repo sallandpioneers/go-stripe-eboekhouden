@@ -78,21 +78,25 @@ type StorageMySQL struct {
 }
 
 type EBoekHouden struct {
+	LedgerAccountCode    EBoekHoudenLedgerAccountCode
 	Username             string
 	SecurityCode1        string
 	SecurityCode2        string
-	UseLedgerAccountCode struct {
-		ForAll     bool
-		PerProduct bool
-		PerPlan    bool
-	}
-	LedgerAccountCode struct {
-		Debtors  string
-		Bank     string
-		Default  string
-		Products map[string]string
-		Plans    map[string]string
-	}
+	UseLedgerAccountCode EBoekHoudenUseLedgerAccountCode
+}
+
+type EBoekHoudenLedgerAccountCode struct {
+	Products map[string]string
+	Plans    map[string]string
+	Debtors  string
+	Bank     string
+	Default  string
+}
+
+type EBoekHoudenUseLedgerAccountCode struct {
+	ForAll     bool
+	PerProduct bool
+	PerPlan    bool
 }
 
 func (c *Config) Validate() error {
@@ -110,7 +114,30 @@ func (c EBoekHouden) Validate() error {
 			validation.Required),
 		validation.Field(&c.SecurityCode2,
 			validation.Required),
+		validation.Field(&c.UseLedgerAccountCode,
+			validation.Required),
+		validation.Field(&c.LedgerAccountCode,
+			validation.Required),
 	)
+}
+
+func (c EBoekHoudenLedgerAccountCode) Validate() error {
+	return validation.ValidateStruct(&c,
+		validation.Field(&c.Bank,
+			validation.Required,
+		),
+		validation.Field(&c.Debtors,
+			validation.Required,
+		),
+		validation.Field(&c.Default,
+			validation.Required,
+		),
+		validation.Field(&c.Products),
+		validation.Field(&c.Plans),
+	)
+}
+func (c EBoekHoudenUseLedgerAccountCode) Validate() error {
+	return validation.ValidateStruct(&c)
 }
 
 func (c Payment) Validate() error {

@@ -78,7 +78,9 @@ func handleError(err *eboekhouden.CError) error {
 	case "":
 		return nil
 	case "E0023":
-		createNewSession()
+		if err := createNewSession(); err != nil {
+			return err
+		}
 		fallthrough
 	default:
 		return fmt.Errorf("An eboekhouding error happend:\ncode\t\t%s\ndescription:\t%s", err.LastErrorCode, err.LastErrorDescription)
