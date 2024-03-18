@@ -1,0 +1,53 @@
+[server]
+name = "go-stripe-eboekhouden"
+url = "eboekhouden.qrlink.nl"
+port = 8080
+maxRequestBodySize = 104857600
+IsDevelopment=true
+
+[client]
+readTimeout = "10s"
+readBufferSize = 4096
+writeTimeout = "10s"
+writeBufferSize = 4096
+
+[router]
+redirectTrailingSlash = false
+redirectFixedPath = false
+handleMethodNotAllowed = false
+handleOPTIONS = false
+
+[DB]
+current = "mysql"
+
+    [DB.MySQL]
+    hostname = "go_stripe_boekhouden_db"
+    port = 3306
+    user = "user"
+    password = "password"
+    database = "db"
+    maxOpenConns = 100
+    maxIdleConns = 100
+    connMaxLifetime = "1m"
+
+[eboekhouden]
+username = "admin@qrlink.nl"
+securityCode1 = "abcd"
+securityCode2 = "efgh"
+useLedgerAccountCodeForAll = false
+useLedgerAccountCodePerProduct = false
+useLedgerAccountCodePerPlan = false
+ledgerAccountCodeDefault = ""
+ledgerAccountCodeProducts = {
+    8000 = "abcdef",
+    8001 = "abcdef",
+    8002 = "abcdef",
+    8003 = "abcdef",
+    8004 = "abcdef",
+    8005 = "abcdef"
+}
+ledgerAccountCodePlans = {}
+
+[stripe]
+key=""
+secret=""
